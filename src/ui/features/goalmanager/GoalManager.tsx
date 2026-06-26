@@ -11,6 +11,7 @@ import { selectGoalsMap, updateGoal as updateGoalRedux } from '../../../store/go
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import DatePicker from '../../components/DatePicker'
 import { Theme } from '../../components/Theme'
+import { Picker } from 'emoji-mart'
 
 type Props = { goal: Goal }
 export function GoalManager(props: Props) {
@@ -21,6 +22,7 @@ export function GoalManager(props: Props) {
   const [name, setName] = useState<string | null>(null)
   const [targetDate, setTargetDate] = useState<Date | null>(null)
   const [targetAmount, setTargetAmount] = useState<number | null>(null)
+  const [emoji, setEmoji] = useState<string>("🎯")
 
   useEffect(() => {
     setName(props.goal.name)
@@ -43,6 +45,7 @@ export function GoalManager(props: Props) {
     const updatedGoal: Goal = {
       ...props.goal,
       name: nextName,
+      icon: emoji,
     }
     dispatch(updateGoalRedux(updatedGoal))
     updateGoalApi(props.goal.id, updatedGoal)
@@ -56,6 +59,7 @@ export function GoalManager(props: Props) {
       name: name ?? props.goal.name,
       targetDate: targetDate ?? props.goal.targetDate,
       targetAmount: nextTargetAmount,
+      icon: emoji,
     }
     dispatch(updateGoalRedux(updatedGoal))
     updateGoalApi(props.goal.id, updatedGoal)
@@ -69,6 +73,7 @@ export function GoalManager(props: Props) {
         name: name ?? props.goal.name,
         targetDate: date ?? props.goal.targetDate,
         targetAmount: targetAmount ?? props.goal.targetAmount,
+        icon: emoji,
       }
       dispatch(updateGoalRedux(updatedGoal))
       updateGoalApi(props.goal.id, updatedGoal)
@@ -104,6 +109,13 @@ export function GoalManager(props: Props) {
         <Field name="Date Created" icon={faCalendarAlt} />
         <Value>
           <StringValue>{new Date(props.goal.created).toLocaleDateString()}</StringValue>
+        </Value>
+      </Group>
+
+      <Group>
+        <Field name="Emoji" icon={faCalendarAlt} />
+        <Value>
+          <Picker onSelect={(e: any) =>setEmoji(e.native)} />
         </Value>
       </Group>
     </GoalManagerContainer>
