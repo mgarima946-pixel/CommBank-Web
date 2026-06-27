@@ -79,6 +79,22 @@ export function GoalManager(props: Props) {
       updateGoalApi(props.goal.id, updatedGoal)
     }
   }
+  const pickEmojiOnClick = async (e: any) => {
+  const selectedEmoji = e.native
+
+  setEmoji(selectedEmoji)
+
+  const updatedGoal: Goal = {
+    ...props.goal,
+    icon: selectedEmoji,
+    name: name ?? props.goal.name,
+    targetDate: targetDate ?? props.goal.targetDate,
+    targetAmount: targetAmount ?? props.goal.targetAmount,
+  }
+
+  dispatch(updateGoalRedux(updatedGoal))
+  await updateGoalApi(props.goal.id, updatedGoal)
+}
 
   return (
     <GoalManagerContainer>
@@ -115,7 +131,7 @@ export function GoalManager(props: Props) {
       <Group>
         <Field name="Emoji" icon={faCalendarAlt} />
         <Value>
-          <Picker onSelect={(e: any) =>setEmoji(e.native)} />
+          <Picker onSelect={pickEmojiOnClick} />
         </Value>
       </Group>
     </GoalManagerContainer>
